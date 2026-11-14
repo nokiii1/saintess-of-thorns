@@ -74,6 +74,17 @@ html,body,button,input,select,textarea{font-family:'Galmuri11',monospace!importa
 .persona-fields b{display:block;font-size:10px;color:#a1638a}
 .persona-fields span{display:block;color:#9b7b90;font-size:10px;margin-top:2px}
 .persona-examples{background:#fff9ee;border:1px solid #ecdcc0;border-radius:9px;color:#9c825e;padding:10px;margin-top:11px;font-size:10px;line-height:1.9;word-break:keep-all}
+
+/* CHARACTER ARCHIVE REFINEMENT — clean arched cards & large CG in detail */
+.character .portrait-window{border:0;box-shadow:none}
+.character .portrait-window::before{content:none!important;display:none!important}
+.character .portrait-window img{object-position:center top}
+.modal{width:min(1000px,100%)}
+.modal-grid{grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:26px;align-items:start}
+.modal .detail-art{position:relative;width:100%;aspect-ratio:1/1;border:1px solid #eacbdc;border-radius:12px;overflow:hidden;background:linear-gradient(145deg,var(--tint,#fff2f8),#fffafd);display:grid;place-items:center}
+.modal .detail-art img{width:100%;height:100%;display:block;object-fit:contain;object-position:center}
+.modal .detail-art .portrait-fallback{position:absolute;inset:0;display:grid;place-items:center}
+@media(max-width:680px){.modal{width:100%;max-height:92dvh}.modal-grid{grid-template-columns:minmax(0,1fr);gap:18px}.modal .detail-art{width:min(100%,420px);margin:0 auto;aspect-ratio:1/1}}
 </style>
 </head>
 <body><div class="sparkles" aria-hidden="true"><i>✧</i><i>✦</i><i>✧</i><i>✧</i><i>✦</i></div><div class="site">
@@ -181,7 +192,12 @@ document.querySelector('#seasonFilters').addEventListener('click',e=>{const b=e.
 document.addEventListener('click',e=>{const world=e.target.closest('[data-world]');const evt=e.target.closest('[data-event]');if(world){const p=places.find(x=>x.id===world.dataset.world);if(!p)return;openModal(`<div class="mini-tag">✧ ${esc(p.kind)} · WORLD ARCHIVE ✧</div><h2 id="modalTitle">${p.glyph} ${esc(p.name)}</h2><p class="detail-text">${esc(p.short)}</p>${p.items.map(([k,v])=>field('◇ '+k,v)).join('')}<div class="notice">※ 공간 출입과 이동은 신분·초청·권한·거리·날씨 등 실제 상황을 따릅니다.</div>`);return}if(evt){const x=imperialEvents.find(i=>i.month===Number(evt.dataset.event));if(!x)return;openModal(`<div class="mini-tag">✧ IMPERIAL EVENT · ${String(x.month).padStart(2,'0')} MONTH ✧</div><h2 id="modalTitle">${x.icon} ${esc(x.name)}</h2>${field('DATE / 일정',x.month+'월'+(x.date?' '+x.date+'일':' · 정확한 개최일 미정'))}${field('LOCATION / 장소',x.place)}${field('EVENT / 행사 안내',x.desc)}${x.note?field('ORIGINAL GAME / 원작 관련 정보',x.note):''}<div class="notice">※ 일정과 참여는 실제 전개에 따라 결정됩니다. 원작 사건이 반드시 일어나지는 않습니다.</div>`);return}});
 
 const $=s=>document.querySelector(s);function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function portrait(c,detail=false){const path=(detail?DETAIL_IMAGE_PATHS[c.id]:null)||IMAGE_PATHS[c.id];return `<div class="portrait" style="--tint:${c.tint};--accent:${c.color}"><div class="portrait-window">${path?`<img loading="lazy" src="${esc(path)}" alt="${esc(c.name)} 일러스트">`:''}<div class="portrait-fallback" ${path?'style="display:none"':''}><div><div class="mark">${c.glyph}</div><small>CHARACTER ILLUSTRATION<br>COMING SOON</small></div></div></div></div>`}
+function portrait(c,detail=false){
+ const path=(detail?DETAIL_IMAGE_PATHS[c.id]:null)||IMAGE_PATHS[c.id];
+ const fallback=`<div class="portrait-fallback" ${path?'style="display:none"':''}><div><div class="mark">${c.glyph}</div><small>CHARACTER ILLUSTRATION<br>COMING SOON</small></div></div>`;
+ if(detail){return `<div class="detail-art" style="--tint:${c.tint};--accent:${c.color}">${path?`<img loading="lazy" src="${esc(path)}" alt="${esc(c.name)} 상세 일러스트">`:''}${fallback}</div>`;}
+ return `<div class="portrait" style="--tint:${c.tint};--accent:${c.color}"><div class="portrait-window">${path?`<img loading="lazy" src="${esc(path)}" alt="${esc(c.name)} 증명사진">`:''}${fallback}</div></div>`;
+}
 $('#chapterGrid').innerHTML=chapters.map((c,i)=>`<button type="button" class="chapter" data-chapter="${i}"><div class="no">${c.no}</div><div class="icon">${c.icon}</div><h3>${c.title}</h3><p>${c.summary}</p><span class="more">✧ 자세히 보기 〉</span></button>`).join('');
 function renderCards(filter='all'){$('#characterGrid').innerHTML=chars.filter(c=>filter==='all'||c.group===filter).map(c=>`<button type="button" class="character" data-char="${c.id}">${portrait(c)}<div class="character-info"><div class="role">${esc(c.role)}</div><div class="name">${esc(c.name)}</div><div class="route">${esc(c.route||c.relation||'ORIGINAL CHARACTER')}</div><span class="view">PROFILE 〉</span></div></button>`).join('')||'<div class="empty">등록된 인물이 없습니다.</div>';}renderCards();
 $('.tabs').addEventListener('click',e=>{const btn=e.target.closest('[data-filter]');if(!btn)return;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));renderCards(btn.dataset.filter)});
