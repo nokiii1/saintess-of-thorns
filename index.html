@@ -41,6 +41,21 @@ html,body,button,input,select,textarea{font-family:'Galmuri11',monospace!importa
 @media(max-width:900px){.world-grid,.event-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.world-grid,.event-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.world-card{padding:15px 11px;min-height:175px}.world-card strong{font-size:11px}.world-card .world-glyph{font-size:27px}.event-card{padding:12px 9px;gap:7px}.event-date{flex-basis:39px}.event-date b{font-size:15px}.event-body strong{font-size:10px}.calendar-intro{padding:15px;gap:10px}.count-card{flex-basis:105px;padding:10px 4px}.count-card b{font-size:20px}.calendar-intro h3{font-size:13px}.calendar-intro p{font-size:10px}}
 @media(max-width:365px){.world-grid,.event-grid{grid-template-columns:1fr}.world-card{min-height:auto}.event-card{gap:12px}}
+
+/* Game guide: command and 1D100 rarity panels */
+.game-system-guide{margin-top:17px;padding-top:14px;border-top:1px solid #efd5e3}
+.game-system-guide h4{margin:12px 0 9px;text-align:center;color:#ac7092;font-size:11px;letter-spacing:.5px}
+.command-grid{display:grid;gap:7px}
+.command-item{display:grid;grid-template-columns:minmax(95px,115px) 1fr;align-items:center;gap:9px;font-size:10px;color:#8d6c80}
+.command-item code{font-family:'Galmuri11',monospace!important;background:#fbe6f0;border:1px solid #efcbdc;border-radius:7px;padding:7px 5px;color:#a45d83;text-align:center;white-space:nowrap;font-size:10px}
+.dice-explain{font-size:10px;line-height:1.9;color:#9d7e92;text-align:center;margin:0 0 10px}
+.rarity-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.rarity{display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--rarity);border-radius:9px;padding:10px 3px;background:var(--rarity-bg);color:var(--rarity);line-height:1.4}
+.rarity strong{font-size:18px}.rarity b{font-size:12px}.rarity small{font-size:9px;white-space:nowrap}
+.rarity-c{--rarity:#8f899a;--rarity-bg:#f4f1f6}.rarity-b{--rarity:#7699b7;--rarity-bg:#edf5fa}.rarity-a{--rarity:#a67eb6;--rarity-bg:#f8f0fc}.rarity-s{--rarity:#ad8748;--rarity-bg:#fff5dc}
+.guide-footnote{font-size:9px!important;color:#af8da1!important;line-height:1.9!important;margin:12px 0 20px!important}
+.guide-lumi{margin-top:18px}
+@media(max-width:420px){.command-item{grid-template-columns:105px 1fr;gap:6px}.rarity-grid{gap:4px}.rarity{padding:8px 2px}.rarity strong{font-size:16px}.rarity small{font-size:8px}}
 </style>
 </head>
 <body><div class="sparkles" aria-hidden="true"><i>✧</i><i>✦</i><i>✧</i><i>✧</i><i>✦</i></div><div class="site">
@@ -58,7 +73,24 @@ html,body,button,input,select,textarea{font-family:'Galmuri11',monospace!importa
 <div class="calendar-filters" id="seasonFilters" aria-label="행사 계절 필터"><button class="tab active" data-season="all">전체 · 12</button><button class="tab" data-season="spring">봄</button><button class="tab" data-season="summer">여름</button><button class="tab" data-season="autumn">가을</button><button class="tab" data-season="winter">겨울</button></div>
 <div class="event-grid" id="eventGrid"></div><div class="notice">✧ 행사 일자는 게임 속 일정입니다. 5월 26일 무도회를 제외한 행사의 정확한 개최일·초청·참석 자격은 주최 측 공지와 실제 진행에 따릅니다. 원작 이벤트와 연애 결과는 강제되지 않으며, 플레이어가 불참해도 세계의 행사는 계속됩니다.</div></section>
 <section class="section" id="fate"><div class="section-head"><div class="kicker">✦ BRANCH OF DESTINY ✦</div><h2>원작과 달라지는 운명</h2><div class="filigree">✿</div><p>이미 쓰인 결말이, 당신의 미래까지 결정하지는 않습니다.</p></div><div class="fate"><article class="fate-side original"><div class="sub">ORIGINAL ROUTE / 정해진 서사</div><h3>원작 속 악역의 파멸</h3><p>원작에서 에버렛 공작가의 후계자는 성녀 후보 엘리시아를 방해하는 악역으로 그려집니다.</p><ul><li>엘리시아 중심으로 진행되는 이야기</li><li>공략 대상과 사랑을 이루는 해피엔딩</li><li>주변의 외면과 후계자 지위 상실</li><li>악역의 파멸로 완성되는 종장</li></ul></article><div class="fate-divider" aria-hidden="true">✧<br>⇢<br>✧</div><article class="fate-side now"><div class="sub">YOUR ROUTE / 새로운 서사</div><h3>당신이 선택하는 미래</h3><p>이제 원작의 악역으로 빙의한 당신이 새로운 삶을 시작합니다. NPC들은 각자 자신의 의지에 따라 행동하고, 원작의 사건과 관계는 달라질 수 있습니다.</p><ul><li>황궁 무도회 약 3주 전부터 시작</li><li>우정·로맨스·동맹·대립 모두 가능</li><li>원작 사건의 변화·취소·새로운 전개</li><li>생존과 결말을 스스로 결정하는 자유</li></ul></article></div><div class="notice">※ 원작의 악역 묘사와 당시 플레이어의 평가는 현재 세계에서 당신의 실제 행적을 확정하지 않습니다. 목걸이 《루멘의 눈물》의 실제 기능도 원작에서 공개되지 않았으며, 게임을 플레이했다는 이유만으로 비밀을 아는 것은 아닙니다.</div></section>
-<section class="section" id="guide"><div class="section-head"><div class="kicker">✦ BEGINNER'S GUIDE ✦</div><h2>생존 가이드</h2><div class="filigree">✿</div><p>친절한 시스템 안내자 루미가 소개하는 새로운 세계.</p></div><div class="archive"><article class="archive-card"><div class="seal">✧</div><h3>시스템과 능력치</h3><p>체력(VIT)·지능(INT)·매력(CHA)·행운(LUK)의 네 가지 능력치를 성장시키세요. 높은 능력치는 선택에 도움을 주지만 성공을 보장하지는 않습니다.</p><div class="story-chips"><span class="chip">VIT 체력</span><span class="chip">INT 지능</span><span class="chip">CHA 매력</span><span class="chip">LUK 행운</span></div></article><article class="archive-card"><div class="seal">◇</div><h3>퀘스트 · 코인 · 가챠</h3><p>선택형 퀘스트를 완료하면 COIN을 받을 수 있습니다. 스탯 가챠는 30 COIN, 아이템 가챠는 100 COIN. 획득한 아이템은 인벤토리에 보관됩니다.</p><div class="story-chips"><span class="chip">30 COIN / 스탯</span><span class="chip">100 COIN / 아이템</span><span class="chip">C · B · A · S</span></div></article><article class="archive-card"><div class="seal">✿</div><h3>루미의 생존 상점</h3><p>회복 포션, 여러 도구, 특별한 잡화 등 기본 상품 4종과 변동 상품 6종이 준비됩니다. COIN은 시스템 안에서만 사용할 수 있습니다.</p></article><article class="archive-card"><div class="seal">♡</div><h3>관계와 자유로운 선택</h3><p>인물들의 호감도와 관계를 확인할 수 있어도 그들의 감정과 선택을 통제할 수는 없습니다. 원작의 연애 루트는 참고 기록이지 강제되는 미래가 아닙니다.</p></article></div><div class="faq" style="margin-top:23px"><details><summary>✧ 《루멘의 눈물》은 무엇인가요?</summary><p>원작의 엘리시아가 처음부터 착용했던 은빛 목걸이입니다. 치유 기적 때 빛나는 모습이 반복적으로 등장했지만 실제 작동 원리와 힘의 출처는 원작에서 설명되지 않았습니다.</p></details><details><summary>✧ 원작 엔딩을 반드시 따라야 하나요?</summary><p>아니요. 원작 사건은 실제 행동에 따라 달라질 수 있고, 등장인물들의 관계도 새롭게 형성됩니다. 원작에서 악역으로 그려졌다는 이유만으로 파멸이 확정되지는 않습니다.</p></details><details><summary>✧ 원작의 모든 내용을 기억하는 상태인가요?</summary><p>아니요. 플레이어가 원작을 얼마나 플레이했고 어떤 사건을 기억하는지는 각자의 설정을 따릅니다. 숨겨진 비밀을 자동으로 알게 되지는 않습니다.</p></details></div></section>
+<section class="section" id="guide"><div class="section-head"><div class="kicker">✦ BEGINNER'S GUIDE ✦</div><h2>생존 가이드</h2><div class="filigree">✿</div><p>친절한 시스템 안내자 루미가 소개하는 새로운 세계.</p></div><div class="archive"><article class="archive-card"><div class="seal">✧</div><h3>시스템과 능력치</h3><p>체력(VIT)·지능(INT)·매력(CHA)·행운(LUK)의 네 가지 능력치를 성장시키세요. 높은 능력치는 선택에 도움을 주지만 성공을 보장하지는 않습니다.</p><div class="story-chips"><span class="chip">VIT 체력</span><span class="chip">INT 지능</span><span class="chip">CHA 매력</span><span class="chip">LUK 행운</span></div></article><article class="archive-card"><div class="seal">◇</div><h3>퀘스트 · 코인 · 가챠</h3><p>선택형 퀘스트를 완료하면 COIN을 받을 수 있습니다. 스탯 가챠는 30 COIN, 아이템 가챠는 100 COIN. 획득한 아이템은 인벤토리에 보관됩니다.</p><div class="story-chips"><span class="chip">30 COIN / 스탯</span><span class="chip">100 COIN / 아이템</span><span class="chip">1D100 등급 판정</span></div>
+<div class="game-system-guide"><h4>✦ SYSTEM COMMAND ✦</h4>
+<div class="command-grid">
+<div class="command-item"><code>!새 퀘스트</code><span>새로운 선택형 퀘스트 받기</span></div>
+<div class="command-item"><code>!퀘스트</code><span>현재 퀘스트 및 진행 상황 조회 (조회 전용)</span></div>
+<div class="command-item"><code>!가챠샵</code><span>스탯·아이템 가챠 이용</span></div>
+<div class="command-item"><code>!상점</code><span>루미의 생존 상점 이용</span></div>
+</div>
+<h4>✦ GACHA PROBABILITY ✦</h4><p class="dice-explain">1~100의 다이스 결과로 등급을 판정합니다. 스탯·아이템 가챠 모두 동일한 등급 확률을 적용합니다.</p>
+<div class="rarity-grid" aria-label="가챠 등급 확률">
+<div class="rarity rarity-c"><strong>C</strong><b>50%</b><small>1~50</small></div>
+<div class="rarity rarity-b"><strong>B</strong><b>30%</b><small>51~80</small></div>
+<div class="rarity rarity-a"><strong>A</strong><b>15%</b><small>81~95</small></div>
+<div class="rarity rarity-s"><strong>S</strong><b>5%</b><small>96~100</small></div>
+</div>
+<p class="guide-footnote">※ 이 페이지는 이용 안내입니다. 명령어는 유니챗 대화에서 입력하고, 실제 가챠 판정은 RP의 다이스 결과에 따릅니다.</p>
+<div class="dialogue guide-lumi"><span class="name">✧ 루미 ✧</span><p>“주인님~! 새로운 퀘스트도 받고, 가챠로 행운도 시험해 보세요! S등급 확률은 무려 5%랍니다! 제 상점도 잊지 마시구요. 물론 외상은 안 돼요~! ✧”</p></div>
+</div></article><article class="archive-card"><div class="seal">✿</div><h3>루미의 생존 상점</h3><p>회복 포션, 여러 도구, 특별한 잡화 등 기본 상품 4종과 변동 상품 6종이 준비됩니다. COIN은 시스템 안에서만 사용할 수 있습니다.</p></article><article class="archive-card"><div class="seal">♡</div><h3>관계와 자유로운 선택</h3><p>인물들의 호감도와 관계를 확인할 수 있어도 그들의 감정과 선택을 통제할 수는 없습니다. 원작의 연애 루트는 참고 기록이지 강제되는 미래가 아닙니다.</p></article></div><div class="faq" style="margin-top:23px"><details><summary>✧ 《루멘의 눈물》은 무엇인가요?</summary><p>원작의 엘리시아가 처음부터 착용했던 은빛 목걸이입니다. 치유 기적 때 빛나는 모습이 반복적으로 등장했지만 실제 작동 원리와 힘의 출처는 원작에서 설명되지 않았습니다.</p></details><details><summary>✧ 원작 엔딩을 반드시 따라야 하나요?</summary><p>아니요. 원작 사건은 실제 행동에 따라 달라질 수 있고, 등장인물들의 관계도 새롭게 형성됩니다. 원작에서 악역으로 그려졌다는 이유만으로 파멸이 확정되지는 않습니다.</p></details><details><summary>✧ 원작의 모든 내용을 기억하는 상태인가요?</summary><p>아니요. 플레이어가 원작을 얼마나 플레이했고 어떤 사건을 기억하는지는 각자의 설정을 따릅니다. 숨겨진 비밀을 자동으로 알게 되지는 않습니다.</p></details></div></section>
 </main><footer class="footer"><div class="title">✧ THE THORN-CROWNED SAINTESS ✧</div>ORIGINAL ROUTES ARE NOT YOUR DESTINY<br>✿ EVERY CHOICE WRITES YOUR STORY ✿</footer></div>
 <div class="modal-back" id="modalBack" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="닫기">✕</button><div class="modal-content" id="modalContent"></div></div></div>
 <script>
