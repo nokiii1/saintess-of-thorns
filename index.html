@@ -90,6 +90,24 @@ html,body,button,input,select,textarea{font-family:'Galmuri11',monospace!importa
 .ending-title-label{font-size:9px;color:#b18eab;letter-spacing:.5px;margin-bottom:6px}
 .ending-route-title{font-size:15px;font-weight:700;color:#9c648c;margin-bottom:10px;line-height:1.65}
 .ending-description{font-size:11px;line-height:2;color:#8f7759;word-break:keep-all}
+
+/* Gentle game-opening and scroll reveal effects (motion-sensitive & mobile friendly). */
+@keyframes title-arrive{from{opacity:0;transform:translate3d(0,18px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes window-arrive{from{opacity:0;transform:translate3d(0,21px,0) scale(.965)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes panel-arrive{from{opacity:0;transform:translate3d(0,22px,0) scale(.975)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@media(prefers-reduced-motion:no-preference){
+  .hero .eyebrow,.hero h1,.hero .english,.hero p,.hero-actions,.hero-frame,.hero-frame-caption{animation:title-arrive .78s cubic-bezier(.2,.75,.25,1) both}
+  .hero .eyebrow{animation-delay:.05s}.hero h1{animation-delay:.17s}.hero .english{animation-delay:.28s}.hero p{animation-delay:.39s}.hero-actions{animation-delay:.51s}
+  .hero-frame{animation-name:window-arrive;animation-duration:1.05s;animation-delay:.25s}.hero-frame-caption{animation-delay:.72s}
+  /* Only JS-enhanced elements start hidden. No JS = all content stays visible. */
+  .motion-ready .scroll-reveal:not(.is-visible){opacity:0;transform:translate3d(0,22px,0) scale(.98)}
+  .motion-ready .scroll-reveal{transition:opacity .66s ease,transform .78s cubic-bezier(.2,.78,.25,1);transition-delay:var(--reveal-delay,0ms)}
+  .motion-ready .scroll-reveal.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero .eyebrow,.hero h1,.hero .english,.hero p,.hero-actions,.hero-frame,.hero-frame-caption{animation:none!important}
+  .scroll-reveal{opacity:1!important;transform:none!important;transition:none!important}
+}
 </style>
 </head>
 <body><div class="sparkles" aria-hidden="true"><i>✧</i><i>✦</i><i>✧</i><i>✧</i><i>✦</i></div><div class="site">
@@ -232,4 +250,37 @@ if(e.target.id==='endingBtn'){const pane=$('#endingContent');const open=pane.cla
 });
 $('#modalClose').addEventListener('click',closeModal);$('#modalBack').addEventListener('click',e=>{if(e.target.id==='modalBack')closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modalBack').classList.contains('show'))closeModal();});
 $('#menuBtn').addEventListener('click',()=>{const opened=$('#navLinks').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(opened))});document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')}));
+
+/* Reveal panels as they enter view, including cards created by the category/season filters. */
+(function initSoftReveals(){
+  if(!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const targets='.section-head,.story-grid>article,.chapter,.character,.world-lead,.world-card,.calendar-intro,.event-card,.fate-side,.archive-card,.faq details';
+  const seen=new WeakSet();
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');io.unobserve(entry.target);}});
+  },{threshold:.07,rootMargin:'0px 0px -24px 0px'});
+  function register(root){
+    const nodes=[];
+    if(root.nodeType===1 && root.matches(targets))nodes.push(root);
+    if(root.querySelectorAll)nodes.push(...root.querySelectorAll(targets));
+    nodes.forEach(el=>{
+      if(seen.has(el))return;
+      seen.add(el);
+      el.classList.add('scroll-reveal');
+      const siblings=el.parentElement?[...el.parentElement.children].filter(e=>e.matches(targets)):[];
+      const index=siblings.indexOf(el);
+      el.style.setProperty('--reveal-delay',Math.min(Math.max(index,0)%4*75,225)+'ms');
+      io.observe(el);
+    });
+  }
+  register(document);
+  document.documentElement.classList.add('motion-ready');
+  const mo=new MutationObserver(records=>{
+    records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1)register(node)}));
+  });
+  ['chapterGrid','characterGrid','worldGrid','eventGrid'].forEach(id=>{
+    const grid=document.getElementById(id);
+    if(grid)mo.observe(grid,{childList:true,subtree:false});
+  });
+})();
 </script></body></html>
